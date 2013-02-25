@@ -22,12 +22,14 @@
 #endif
 
 static int show_counters = 0;
+static char *chainname = NULL;
 
 static const struct option options[] = {
 	{.name = "counters", .has_arg = false, .val = 'c'},
 	{.name = "dump",     .has_arg = false, .val = 'd'},
 	{.name = "table",    .has_arg = true,  .val = 't'},
 	{.name = "modprobe", .has_arg = true,  .val = 'M'},
+	{.name = "chain",    .has_arg = true,  .val = 'C'},
 	{NULL},
 };
 
@@ -85,6 +87,9 @@ static int do_output(const char *tablename)
 	     chain;
 	     chain = iptc_next_chain(h)) {
 
+		if (chainname && *chainname && strcmp(chain, chainname))
+			continue;
+
 		printf(":%s ", chain);
 		if (iptc_builtin(chain, h)) {
 			struct xt_counters count;
@@ -100,6 +105,9 @@ static int do_output(const char *tablename)
 	     chain;
 	     chain = iptc_next_chain(h)) {
 		const struct ipt_entry *e;
+
+		if (chainname && *chainname && strcmp(chain, chainname))
+			continue;
 
 		/* Dump out rules */
 		e = iptc_first_rule(chain, h);
@@ -140,7 +148,7 @@ iptables_save_main(int argc, char *argv[])
 	init_extensions4();
 #endif
 
-	while ((c = getopt_long(argc, argv, "bcdt:", options, NULL)) != -1) {
+	while ((c = getopt_long(argc, argv, "bcdt:C:", options, NULL)) != -1) {
 		switch (c) {
 		case 'c':
 			show_counters = 1;
@@ -152,6 +160,9 @@ iptables_save_main(int argc, char *argv[])
 			break;
 		case 'M':
 			xtables_modprobe_program = optarg;
+			break;
+		case 'C':
+			chainname = optarg;
 			break;
 		case 'd':
 			do_output(tablename);

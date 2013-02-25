@@ -1,4 +1,4 @@
-.TH IPTABLES-SAVE 8 "Jan 04, 2001" "" ""
+.TH IPTABLES-SAVE 8 "Feb 25, 2013" "" ""
 .\"
 .\" Man page written by Harald Welte <laforge@gnumonks.org>
 .\" It is based on the iptables man page.
@@ -22,7 +22,7 @@
 iptables-save \(em dump iptables rules to stdout
 .SH SYNOPSIS
 \fBiptables\-save\fP [\fB\-M\fP \fImodprobe\fP] [\fB\-c\fP]
-[\fB\-t\fP \fItable\fP]
+[\fB\-t\fP \fItable\fP] [\fB\-C\fP \fIchain\fP]
 .SH DESCRIPTION
 .PP
 .B iptables-save
@@ -39,6 +39,10 @@ include the current values of all packet and byte counters in the output
 \fB\-t\fR, \fB\-\-table\fR \fItablename\fP
 restrict output to only one table. If not specified, output includes all
 available tables.
+.TP
+\fB\-C\fR, \fB\-\-chain\fR \fIchainname\fP
+restrict output to only one chain. If not specified, output includes all
+available chains.
 .SH BUGS
 None known as of iptables-1.2.1 release
 .SH AUTHOR
